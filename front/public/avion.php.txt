@@ -1,0 +1,77 @@
+-- 
+-- Structure de la table `avion`
+-- 
+
+CREATE TABLE `avion` (
+  `IdAvion` varchar(4) NOT NULL default '',
+  `Marque` varchar(20) NOT NULL default '',
+  `NbrPlace` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`IdAvion`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 
+-- Contenu de la table `avion`
+-- 
+
+INSERT INTO `avion` VALUES ('AB12', 'Airbus2012', 120);
+INSERT INTO `avion` VALUES ('B013', 'Boeing2013', 180);
+INSERT INTO `avion` VALUES ('CN10', 'concorde2010', 220);
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `pilote`
+-- 
+
+CREATE TABLE `pilote` (
+  `Matricule` varchar(4) NOT NULL default '',
+  `Nom` varchar(30) NOT NULL default '',
+  `Prenom` varchar(30) NOT NULL default '',
+  `Genre` enum('M','F') NOT NULL default 'M',
+  `Email` varchar(30) NOT NULL default '',
+  PRIMARY KEY  (`Matricule`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 
+-- Contenu de la table `pilote`
+-- 
+
+INSERT INTO `pilote` VALUES ('BL68', 'Bellili', 'Lamine', 'M', 'bellili@laposte.net');
+INSERT INTO `pilote` VALUES ('CN70', 'Chawachi', 'Noura', 'F', 'noura@gmail.com');
+INSERT INTO `pilote` VALUES ('KY75', 'Kefi', 'Youssra', 'F', 'Kefiyoussra@yahoo.fr');
+
+-- --------------------------------------------------------
+
+-- 
+-- Structure de la table `vol`
+-- 
+
+CREATE TABLE `vol` (
+  `IdAvion` varchar(4) NOT NULL default '',
+  `DateDep` datetime NOT NULL default '0000-00-00 00:00:00',
+  `Duree` int(11) NOT NULL default '0',
+  `RefDep` int(11) NOT NULL default '0',
+  `RefDest` int(11) NOT NULL default '0',
+  `MatPilote` varchar(4) NOT NULL default '',
+  PRIMARY KEY  (`IdAvion`,`DateDep`),
+  KEY `MatPilote` (`MatPilote`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- 
+-- Contenu de la table `vol`
+-- 
+
+INSERT INTO `vol` VALUES ('AB12', '2015-01-12 13:40:00', 75, 1, 5, 'BL68');
+INSERT INTO `vol` VALUES ('CN10', '2015-02-24 11:30:00', 65, 6, 3, 'CN70');
+
+-- 
+-- Contraintes pour les tables exportées
+-- 
+
+-- 
+-- Contraintes pour la table `vol`
+-- 
+ALTER TABLE `vol`
+  ADD CONSTRAINT `vol_ibfk_2` FOREIGN KEY (`MatPilote`) REFERENCES `pilote` (`Matricule`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `vol_ibfk_1` FOREIGN KEY (`IdAvion`) REFERENCES `avion` (`IdAvion`) ON DELETE CASCADE ON UPDATE CASCADE;
+        
